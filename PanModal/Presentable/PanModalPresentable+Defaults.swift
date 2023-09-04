@@ -80,6 +80,14 @@ public extension PanModalPresentable where Self: UIViewController {
     var allowsTapToDismiss: Bool {
         return true
     }
+    
+    var allowsBackGroundGesture: Bool {
+        true
+    }
+
+    var isBackgroundViewInclude: Bool {
+        true
+    }
 
     var isUserInteractionEnabled: Bool {
         return true

@@ -141,6 +141,10 @@ public protocol PanModalPresentable: AnyObject {
      Default value is true.
      */
     var allowsTapToDismiss: Bool { get }
+    
+    var allowsBackGroundGesture: Bool { get }
+
+    var isBackgroundViewInclude: Bool { get }
 
     /**
      A flag to toggle user interactions on the container view.

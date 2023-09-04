@@ -106,8 +106,8 @@ open class PanModalPresentationController: UIPresentationController {
      */
     private lazy var backgroundView: DimmedView = {
         let view: DimmedView
-        if let color = presentable?.panModalBackgroundColor {
-            view = DimmedView(dimColor: color)
+        if let presentable = presentable {
+            view = DimmedView(dimColor: presentable.panModalBackgroundColor)
         } else {
             view = DimmedView()
         }
@@ -170,6 +170,11 @@ open class PanModalPresentationController: UIPresentationController {
     override public func containerViewWillLayoutSubviews() {
         super.containerViewWillLayoutSubviews()
         configureViewLayout()
+        
+        if presentable?.allowsBackGroundGesture == false {
+            containerView?.isUserInteractionEnabled = false
+            containerView?.gestureRecognizers = nil
+        }
     }
 
     override public func presentationTransitionWillBegin() {
@@ -177,7 +182,10 @@ open class PanModalPresentationController: UIPresentationController {
         guard let containerView = containerView
             else { return }
 
-        layoutBackgroundView(in: containerView)
+        if presentable?.isBackgroundViewInclude == true {
+            layoutBackgroundView(in: containerView)
+        }
+
         layoutPresentedView(in: containerView)
         configureScrollViewInsets()
 

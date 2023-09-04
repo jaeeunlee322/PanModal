@@ -33,4 +33,12 @@ extension BasicViewController: PanModalPresentable {
     var anchorModalToLongForm: Bool {
         return false
     }
+    
+    var allowsBackGroundGesture: Bool {
+        false
+    }
+    
+    var isBackgroundViewInclude: Bool {
+        false
+    }
 }
