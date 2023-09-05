@@ -172,7 +172,6 @@ open class PanModalPresentationController: UIPresentationController {
         configureViewLayout()
         
         if presentable?.allowsBackGroundGesture == false {
-            containerView?.isUserInteractionEnabled = false
             containerView?.gestureRecognizers = nil
         }
     }
