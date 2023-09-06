@@ -34,8 +34,8 @@ extension BasicViewController: PanModalPresentable {
         return false
     }
     
-    var allowsBackGroundGesture: Bool {
-        false
+    var allowsInteractionOutsideOfPresentation: Bool {
+        true
     }
     
     var isBackgroundViewInclude: Bool {

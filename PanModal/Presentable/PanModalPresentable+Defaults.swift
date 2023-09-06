@@ -81,8 +81,8 @@ public extension PanModalPresentable where Self: UIViewController {
         return true
     }
     
-    var allowsBackGroundGesture: Bool {
-        true
+    var allowsInteractionOutsideOfPresentation: Bool {
+        false
     }
 
     var isBackgroundViewInclude: Bool {

@@ -142,7 +142,7 @@ public protocol PanModalPresentable: AnyObject {
      */
     var allowsTapToDismiss: Bool { get }
     
-    var allowsBackGroundGesture: Bool { get }
+    var allowsInteractionOutsideOfPresentation: Bool { get }
 
     var isBackgroundViewInclude: Bool { get }
 

@@ -23,6 +23,10 @@ import UIKit
  By conforming to the PanModalPresentable protocol & overriding values
  the presented view can define its layout configuration & presentation.
  */
+private extension Selector {
+    static let hitTest = #selector(UIView.hitTest(_:with:))
+}
+
 open class PanModalPresentationController: UIPresentationController {
 
     /**
@@ -170,16 +174,16 @@ open class PanModalPresentationController: UIPresentationController {
     override public func containerViewWillLayoutSubviews() {
         super.containerViewWillLayoutSubviews()
         configureViewLayout()
-        
-        if presentable?.allowsBackGroundGesture == false {
-            containerView?.gestureRecognizers = nil
-        }
     }
 
     override public func presentationTransitionWillBegin() {
 
         guard let containerView = containerView
             else { return }
+
+        if presentable?.allowsInteractionOutsideOfPresentation == true {
+            swizzleHitTest(for: containerView)
+        }
 
         if presentable?.isBackgroundViewInclude == true {
             layoutBackgroundView(in: containerView)
@@ -254,6 +258,29 @@ open class PanModalPresentationController: UIPresentationController {
 // MARK: - Public Methods
 
 public extension PanModalPresentationController {
+    
+    
+    private func swizzleHitTest(for view: UIView) {
+        guard let method = class_getInstanceMethod(type(of: view), .hitTest) else { return }
+        let originalImp = method_getImplementation(method)
+
+        let newImp = imp_implementationWithBlock({ _self, point, event in
+            let originalImpFunc = unsafeBitCast(
+                originalImp,
+                to: (@convention(c) (Any, Selector, CGPoint, UIEvent?) -> UIView?).self
+            )
+
+            let hitView = originalImpFunc(_self, .hitTest, point, event)
+            if hitView === (_self as? UIView) {
+                return nil
+            } else {
+                return hitView
+            }
+
+        } as @convention(block) (Any, CGPoint, UIEvent?) -> UIView?)
+
+        method_setImplementation(method, newImp)
+    }
 
     /**
      Transition the PanModalPresentationController
